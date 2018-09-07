@@ -14,7 +14,7 @@ tic
 
 mu0 = 4* pi * 10^-7; % [H/m] SI.
 
-grid_size = [10,10,10];
+grid_size = [50,50,50];
 
 world_range = [10^-3, 10^-3, 10^-3];
 
@@ -50,8 +50,6 @@ Mag = Mag.*scaling;
 
 [space(1).find,space(2).find,space(3).find]=ind2sub(size(Mag), find(Mag));
 
-
-
 space(1).totX = zeros(size(Mag));   space(1).totY = zeros(size(Mag));
 space(1).totZ = zeros(size(Mag));   space(1).totB = zeros(size(Mag));
 
@@ -59,9 +57,9 @@ for nP = 1:length(find(Mag))
     space(nP).par = [space(1).find(nP) space(2).find(nP) space(3).find(nP)];
     space(nP).mom = Mag(space(nP).par(1),space(nP).par(2),space(nP).par(3));
     space(nP).momV = space(nP).mom.*unimagV;
-    space(nP).Rx = space(1).X - space(1).X(space(nP).par(1),space(nP).par(2),space(nP).par(3));
-    space(nP).Ry = space(1).Y - space(1).Y(space(nP).par(1),space(nP).par(2),space(nP).par(3));
-    space(nP).Rz = space(1).Z - space(1).Z(space(nP).par(1),space(nP).par(2),space(nP).par(3));
+    space(nP).Rx = space(1).X + space(1).X(space(nP).par(1),space(nP).par(2),space(nP).par(3));
+    space(nP).Ry = space(1).Y + space(1).Y(space(nP).par(1),space(nP).par(2),space(nP).par(3));
+    space(nP).Rz = space(1).Z + space(1).Z(space(nP).par(1),space(nP).par(2),space(nP).par(3));
     space(nP).modR = sqrt(space(nP).Rx.^2 + space(nP).Ry.^2 + space(nP).Rz.^2);
     
     
@@ -76,21 +74,48 @@ for nP = 1:length(find(Mag))
         space(nP).Bx(nX,nY,nZ) = B(1);  space(nP).By(nX,nY,nZ) = B(2); 
         space(nP).Bz(nX,nY,nZ) = B(3);  
         
+        Bffeq = mu0/4/pi*space(nP).mom.*rvec./(space(nP).modR(nX,nY,nZ)^3);
+        space(nP).Bxffeq(nX,nY,nZ) = Bffeq(1);  space(nP).Byffeq(nX,nY,nZ) = Bffeq(2); 
+        space(nP).Bzffeq(nX,nY,nZ) = Bffeq(3); 
+        
             end 
         end
     end
     
     space(nP).modB = sqrt(space(nP).Bx.^2 + space(nP).By.^2 + space(nP).Bz.^2);
     
-    space(1).totX = zeros(size(Mag));   space(1).totY = zeros(size(Mag));
-    space(1).totZ = zeros(size(Mag));   space(1).totB = zeros(size(Mag));
-    
+     
     space(1).totX = space(1).totX + space(nP).Bx;
     space(1).totY = space(1).totY + space(nP).By;
     space(1).totZ = space(1).totZ + space(nP).Bz;
     space(1).totB = space(1).totB + space(nP).modB;
         
 end 
+
+% Just to debug the system
+debug.odd = space(1).Bz + space(2).Bz + space(3).Bz + space(4).Bz;
+debug.even = space(5).Bz + space(6).Bz + space(7).Bz + space(8).Bz;
+
+debug.oddffeq = space(1).Bffeqz + space(2).Bffeqz + space(3).Bffeqz + space(4).Bffeqz;
+debug.evenffeq = space(5).Bffeqz + space(6).Bffeqz + space(7).Bffeqz + space(8).Bffeqz;
+debug.bffeqtot = debug.evenffeq + debug.oddffeq;
+
+figure(1)
+subplot(1,2,1)
+slice(space(1).X,space(1).Y,space(1).Z, debug.odd, 0,0,0)
+colorbar 
+caxis([-0.001,0])
+title 'Positive charges'
+subplot(1,2,2)
+slice(space(1).X,space(1).Y,space(1).Z, debug.even, 0,0,0)
+colorbar 
+caxis([0,0.001])
+title 'Negative charges'
+
+figure(2)
+slice(space(1).X,space(1).Y,space(1).Z, space(1).totZ, 0,0,0)
+caxis([-0.001,0.001])
+colorbar
 
 
 
