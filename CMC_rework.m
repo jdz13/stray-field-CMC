@@ -96,9 +96,12 @@ end
 debug.odd = space(1).Bz + space(2).Bz + space(3).Bz + space(4).Bz;
 debug.even = space(5).Bz + space(6).Bz + space(7).Bz + space(8).Bz;
 
-debug.oddffeq = space(1).Bffeqz + space(2).Bffeqz + space(3).Bffeqz + space(4).Bffeqz;
-debug.evenffeq = space(5).Bffeqz + space(6).Bffeqz + space(7).Bffeqz + space(8).Bffeqz;
+debug.oddffeq = space(1).Bzffeq + space(2).Bzffeq + space(3).Bzffeq + space(4).Bzffeq;
+debug.evenffeq = space(5).Bzffeq + space(6).Bzffeq + space(7).Bzffeq + space(8).Bzffeq;
 debug.bffeqtot = debug.evenffeq + debug.oddffeq;
+
+filter = [10^-4, 10^-4, 10^-4];
+[space(1).totXfil, space(1).totYfil, space(1).totZfil] = quiver_filter(filter, space(1).totX, space(1).totX, space(1).totX);
 
 figure(1)
 subplot(1,2,1)
@@ -116,7 +119,8 @@ figure(2)
 slice(space(1).X,space(1).Y,space(1).Z, space(1).totZ, 0,0,0)
 caxis([-0.001,0.001])
 colorbar
-
+%hold on 
+%quiver3(space(1).X,space(1).Y,space(1).Z,space(1).totXfil,space(1).totYfil,space(1).totZfil);
 
 
 toc
