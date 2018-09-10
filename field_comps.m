@@ -1,11 +1,10 @@
-function [numin,numout, varargout] = field_comps(varargin)
+function [outBx, outBy, outBz] = field_comps(inBx, inBy, inBz)
 %FIELDS Summary of this function goes here
 %   Detailed explanation goes here
-numin = max(size(varargin));
-numout = nargout;
 
-    for no = 1:numin
-        varargout{no} = no;
-    end
+outBx = inBx;
+outBy = inBy;
+outBz = inBz;
+
 end
 

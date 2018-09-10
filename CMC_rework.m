@@ -53,6 +53,9 @@ Mag = Mag.*scaling;
 space(1).totX = zeros(size(Mag));   space(1).totY = zeros(size(Mag));
 space(1).totZ = zeros(size(Mag));   space(1).totB = zeros(size(Mag));
 
+space(1).totXffeq = zeros(size(Mag));   space(1).totYffeq = zeros(size(Mag));
+space(1).totZffeq = zeros(size(Mag));   space(1).totBffeq = zeros(size(Mag));
+
 for nP = 1:length(find(Mag))
     space(nP).par = [space(1).find(nP) space(2).find(nP) space(3).find(nP)];
     space(nP).mom = Mag(space(nP).par(1),space(nP).par(2),space(nP).par(3));
@@ -71,12 +74,10 @@ for nP = 1:length(find(Mag))
                 
         rvec = [space(nP).Rx(nX,nY,nZ) space(nP).Ry(nX,nY,nZ) space(nP).Rz(nX,nY,nZ)];
         B = mu0/4/pi*(3*((dot(space(nP).momV,rvec).*rvec/space(nP).modR(nX,nY,nZ))-(space(nP).momV/space(nP).modR(nX,nY,nZ).^3)));
-        space(nP).Bx(nX,nY,nZ) = B(1);  space(nP).By(nX,nY,nZ) = B(2); 
-        space(nP).Bz(nX,nY,nZ) = B(3);  
+        [space(nP).Bx(nX,nY,nZ), space(nP).By(nX,nY,nZ), space(nP).Bz(nX,nY,nZ)] = field_comps(B(1), B(2), B(3));  
         
         Bffeq = mu0/4/pi*space(nP).mom.*rvec./(space(nP).modR(nX,nY,nZ)^3);
-        space(nP).Bxffeq(nX,nY,nZ) = Bffeq(1);  space(nP).Byffeq(nX,nY,nZ) = Bffeq(2); 
-        space(nP).Bzffeq(nX,nY,nZ) = Bffeq(3); 
+        [space(nP).Bxffeq(nX,nY,nZ), space(nP).Byffeq(nX,nY,nZ), space(nP).Bzffeq(nX,nY,nZ)] = field_comps(Bffeq(1), Bffeq(2), Bffeq(3)); 
         
             end 
         end
@@ -89,12 +90,17 @@ for nP = 1:length(find(Mag))
     space(1).totY = space(1).totY + space(nP).By;
     space(1).totZ = space(1).totZ + space(nP).Bz;
     space(1).totB = space(1).totB + space(nP).modB;
+    
+    space(1).totXffeq = space(1).totXffeq + space(nP).Bxffeq;
+    space(1).totYffeq = space(1).totYffeq + space(nP).Byffeq;
+    space(1).totZffeq = space(1).totZffeq + space(nP).Bzffeq;
         
 end 
 
 % Just to debug the system
 debug.odd = space(1).Bz + space(2).Bz + space(3).Bz + space(4).Bz;
 debug.even = space(5).Bz + space(6).Bz + space(7).Bz + space(8).Bz;
+debug.btot = debug.even + debug.odd;
 
 debug.oddffeq = space(1).Bzffeq + space(2).Bzffeq + space(3).Bzffeq + space(4).Bzffeq;
 debug.evenffeq = space(5).Bzffeq + space(6).Bzffeq + space(7).Bzffeq + space(8).Bzffeq;
@@ -122,5 +128,5 @@ colorbar
 %hold on 
 %quiver3(space(1).X,space(1).Y,space(1).Z,space(1).totXfil,space(1).totYfil,space(1).totZfil);
 
-
+ 
 toc
