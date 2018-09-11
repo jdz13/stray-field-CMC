@@ -56,6 +56,10 @@ space(1).totZ = zeros(size(Mag));   space(1).totB = zeros(size(Mag));
 space(1).totXffeq = zeros(size(Mag));   space(1).totYffeq = zeros(size(Mag));
 space(1).totZffeq = zeros(size(Mag));   space(1).totBffeq = zeros(size(Mag));
 
+
+space(1).totXcrl = zeros(size(Mag));   space(1).totYcrl = zeros(size(Mag));
+space(1).totZcrl = zeros(size(Mag));   space(1).totBcrl = zeros(size(Mag));   
+
 for nP = 1:length(find(Mag))
     space(nP).par = [space(1).find(nP) space(2).find(nP) space(3).find(nP)];
     space(nP).mom = Mag(space(nP).par(1),space(nP).par(2),space(nP).par(3));
@@ -79,22 +83,33 @@ for nP = 1:length(find(Mag))
         Bffeq = mu0/4/pi*space(nP).mom.*rvec./(space(nP).modR(nX,nY,nZ)^3);
         [space(nP).Bxffeq(nX,nY,nZ), space(nP).Byffeq(nX,nY,nZ), space(nP).Bzffeq(nX,nY,nZ)] = field_comps(Bffeq(1), Bffeq(2), Bffeq(3)); 
         
+        A = mu0/4/pi.*cross(space(nP).momV, rvec)./(space(nP).modR(nX,nY,nZ)^3);
+        [space(nP).Ax(nX,nY,nZ), space(nP).Ay(nX,nY,nZ), space(nP).Az(nX,nY,nZ)] = field_comps(A(1), A(2), A(3));
+        
             end 
         end
     end
     
     space(nP).modB = sqrt(space(nP).Bx.^2 + space(nP).By.^2 + space(nP).Bz.^2);
-    
-     
     space(1).totX = space(1).totX + space(nP).Bx;
     space(1).totY = space(1).totY + space(nP).By;
     space(1).totZ = space(1).totZ + space(nP).Bz;
     space(1).totB = space(1).totB + space(nP).modB;
     
+    space(nP).modBffeq = sqrt(space(nP).Bxffeq.^2 + space(nP).Byffeq.^2 + space(nP).Bzffeq.^2);
     space(1).totXffeq = space(1).totXffeq + space(nP).Bxffeq;
     space(1).totYffeq = space(1).totYffeq + space(nP).Byffeq;
     space(1).totZffeq = space(1).totZffeq + space(nP).Bzffeq;
-        
+    space(1).totBffeq = space(1).totBffeq + space(nP).modBffeq;
+    
+    [space(nP).Ax(nX,nY,nZ), space(nP).Ay(nX,nY,nZ), space(nP).Az(nX,nY,nZ)] = field_comps(A(1), A(2), A(3));
+    [space(nP).curlx,space(nP).curly,space(nP).curlz,space(nP).cav] = curl(space(1).X,space(1).Y,space(1).Z,space(nP).Ax, space(nP).Ay, space(nP).Az);
+    space(1).totXcrl = space(1).totXcrl + space(nP).curlx;
+    space(1).totYcrl = space(1).totYcrl + space(nP).curly;
+    space(1).totZcrl = space(1).totZcrl + space(nP).curlz;
+    space(nP).modBcrl = sqrt(space(nP).curlx.^2 + space(nP).curly.^2 + space(nP).curlz.^2); 
+    space(1).totBcrl = space(1).totBcrl + space(nP).modBcrl;
+    
 end 
 
 % Just to debug the system
@@ -105,6 +120,8 @@ debug.btot = debug.even + debug.odd;
 debug.oddffeq = space(1).Bzffeq + space(2).Bzffeq + space(3).Bzffeq + space(4).Bzffeq;
 debug.evenffeq = space(5).Bzffeq + space(6).Bzffeq + space(7).Bzffeq + space(8).Bzffeq;
 debug.bffeqtot = debug.evenffeq + debug.oddffeq;
+
+
 
 filter = [10^-4, 10^-4, 10^-4];
 [space(1).totXfil, space(1).totYfil, space(1).totZfil] = quiver_filter(filter, space(1).totX, space(1).totX, space(1).totX);
@@ -123,10 +140,10 @@ title 'Negative charges'
 
 figure(2)
 slice(space(1).X,space(1).Y,space(1).Z, space(1).totZ, 0,0,0)
-caxis([-0.001,0.001])
+caxis([-0.0001,0.0001])
 colorbar
 %hold on 
 %quiver3(space(1).X,space(1).Y,space(1).Z,space(1).totXfil,space(1).totYfil,space(1).totZfil);
 
- 
+
 toc
