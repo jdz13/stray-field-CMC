@@ -1,7 +1,30 @@
-function [outputArg1,outputArg2] = Jannsen(inputArg1,inputArg2)
-%JANNSEN Summary of this function goes here
-%   Detailed explanation goes here
-outputArg1 = inputArg1;
-outputArg2 = inputArg2;
+function [HxAkoun, HyAkoun, HzAkoun] = Jannsen(nX,nY,nZ,Rx,Ry,Rz,cell_size,Mag)
+
+HxAkoun  = 0;
+HyAkoun  = 0;
+HzAkoun  = 0;
+
+             for k = 0:1
+                for l = 0:1
+                    for m = 0:1
+                        
+                        S = Rx - ((-1)^k)*cell_size(1);
+                        T = Ry - ((-1)^l)*cell_size(2);
+                        U = Rz - ((-1)^m)*cell_size(3);
+                        R = sqrt(S^2+T^2+U^2);
+                 
+                        dHxAkoun = ((-1)^(k+l+m))* log(R-T);
+                        dHyAkoun = ((-1)^(k+l+m))* log(R-S);
+                        dHzAkoun = ((-1)^(k+l+m))* atan((S*T)/(U*R));
+                                                                   
+                        HxAkoun  = HxAkoun + (dHxAkoun);
+                        HyAkoun  = HyAkoun + (dHyAkoun);
+                        HzAkoun  = HzAkoun + (dHzAkoun);
+                     
+                    end
+                end 
+            end
+
+
 end
 

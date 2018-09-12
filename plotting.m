@@ -1,7 +1,43 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Looking at the components from the far field equation
+% Looking at the components from the Janssen Method
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 partno = 1;
+
+figure(3)
+clf
+subplot(2,2,1)
+slice(space(1).X,space(1).Y,space(1).Z,mu0.*space(partno).HxAkoun , 0.0002,0,[])
+caxis([-0.00000001,0.00000001])
+polarmap
+colorbar
+title 'X component'
+
+subplot(2,2,2)
+slice(space(1).X,space(1).Y,space(1).Z,mu0.*space(partno).HyAkoun , 0,0.0002,[])
+caxis([-0.00000001,0.00000001])
+polarmap
+colorbar
+title 'Y component'
+
+subplot(2,2,3)
+slice(space(1).X,space(1).Y,space(1).Z,mu0.*space(partno).HzAkoun , 0,0,[])
+caxis([-0.00000001,0.00000001])
+polarmap
+colorbar
+title 'Z component'
+
+
+subplot(2,2,4)
+slice(space(1).X,space(1).Y,space(1).Z,sqrt(space(partno).HxAkoun.^2+space(partno).HyAkoun.^2+space(partno).HzAkoun.^2)  , 0,0,[])
+caxis([0,0.001])
+polarmap
+colorbar
+title 'tot B Janssen'
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Looking at the components from the far field equation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure(4)
 clf
@@ -41,27 +77,29 @@ title 'tot B Ffeq'
 figure(5)
 clf
 subplot(2,2,1)
-slice(space(1).X,space(1).Y,space(1).Z,space(partno).totX , 0.0005,0,[])
+slice(space(1).X,space(1).Y,space(1).Z,space(partno).Bx , 0.0005,0,[])
+caxis([-0.00001,0.00001])
 polarmap
 colorbar
 title 'X component'
 
 subplot(2,2,2)
-slice(space(1).X,space(1).Y,space(1).Z,space(partno).totY , 0,0.0005,[])
+slice(space(1).X,space(1).Y,space(1).Z,space(partno).By , 0,0.0005,[])
+caxis([-0.00001,0.00001])
 polarmap
 colorbar
 title 'Y component'
 
 subplot(2,2,3)
-slice(space(1).X,space(1).Y,space(1).Z,space(partno).totZ , 0,0,[])
-caxis([0,0.0001])
+slice(space(1).X,space(1).Y,space(1).Z,space(partno).Bz , 0,0,[])
+caxis([-0.00001,0.00001])
 polarmap
 colorbar
 title 'Z component'
 
 subplot(2,2,4)
-slice(space(1).X,space(1).Y,space(1).Z,space(1).totB , 0,0,[])
-caxis([0,0.0001])
+slice(space(1).X,space(1).Y,space(1).Z,space(1).modB , 0,0,[])
+caxis([-0.0001,0.0001])
 polarmap
 colorbar
 title 'Tot B Dipole eq'
@@ -98,7 +136,7 @@ colorbar
 title 'Z component'
 
 subplot(2,2,4)
-slice(space(1).X,space(1).Y,space(1).Z,8*space(1).modBcrl , 0,0,[])
+slice(space(1).X,space(1).Y,space(1).Z,space(1).modBcrl , 0,0,[])
 caxis([0,0.0001])
 polarmap
 colorbar
@@ -149,9 +187,9 @@ title ('2D plane of 3D output')
 
 %%
 
-plane = size(space(nP).curly,2)/2-16;
+plane = size(space(nP).curly,2)/2;
 
-dat = space(nP).totBcrl(:,:,plane);
+dat = space(1).totBcrl(:,:,plane);
 reszemat = size(dat);
 reszemat(reszemat == 1) = [];
 dat = reshape (dat, reszemat);
