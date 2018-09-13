@@ -1,39 +1,84 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Looking at the components from the Janssen Method
+% Looking at the components from the MagH Method
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 partno = 1;
 
-figure(3)
+figure(2)
 clf
 subplot(2,2,1)
-slice(space(1).X,space(1).Y,space(1).Z,mu0.*Akoun(partno).HxAkoun , 0.0002,0,[])
-caxis([-0.00000001,0.00000001])
+slice(space(1).X,space(1).Y,space(1).Z,MagH(partno).HxMagH/8 , 0.0002,0,[])
+caxis([-0.00001,0.00001])
 polarmap
 colorbar
 title 'X component'
 
 subplot(2,2,2)
-slice(space(1).X,space(1).Y,space(1).Z,mu0.*Akoun(partno).HyAkoun , 0,0.0002,[])
-caxis([-0.00000001,0.00000001])
+slice(space(1).X,space(1).Y,space(1).Z,MagH(partno).HyMagH/8 , 0,0.0002,[])
+caxis([-0.00001,0.00001])
 polarmap
 colorbar
 title 'Y component'
 
 subplot(2,2,3)
-slice(space(1).X,space(1).Y,space(1).Z,mu0.*Akoun(partno).HzAkoun , 0,0,[])
-caxis([-0.00000001,0.00000001])
+slice(space(1).X,space(1).Y,space(1).Z,MagH(partno).HzMagH/8 , 0,0,[])
+caxis([-0.00001,0.00001])
 polarmap
 colorbar
 title 'Z component'
 
 
 subplot(2,2,4)
-slice(space(1).X,space(1).Y,space(1).Z,Akoun(partno).modBAkoun , 0,0,[])
-caxis([0,0.001])
+slice(space(1).X,space(1).Y,space(1).Z,MagH(partno).modBMagH/8 , 0,0,[])
+caxis([0,0.0001])
+polarmap
+colorbar
+title 'tot B MagH'
+
+colormap (parula)
+
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Looking at the components from the Janssen Method
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+partno = 1;
+
+checker = Akoun(1).modBAkoun./field(1).modB;
+checker2 = ffeq(1).totBffeq./field(1).modB;
+checker3 = MagH(1).modBMagH./field(1).modB;
+
+figure(3)
+clf
+subplot(2,2,1)
+slice(space(1).X,space(1).Y,space(1).Z,Akoun(partno).HxAkoun./8 , 0.0002,0,[])
+caxis([-0.00001,0.00001])
+polarmap
+colorbar
+title 'X component'
+
+subplot(2,2,2)
+slice(space(1).X,space(1).Y,space(1).Z,Akoun(partno).HyAkoun./8 , 0,0.0002,[])
+caxis([-0.00001,0.00001])
+polarmap
+colorbar
+title 'Y component'
+
+subplot(2,2,3)
+slice(space(1).X,space(1).Y,space(1).Z,Akoun(partno).HzAkoun./8 , 0,0,[])
+caxis([-0.00001,0.00001])
+polarmap
+colorbar
+title 'Z component'
+
+
+subplot(2,2,4)
+slice(space(1).X,space(1).Y,space(1).Z,Akoun(partno).modBAkoun./8 , 0,0,[])
+caxis([0,0.0001])
 polarmap
 colorbar
 title 'tot B Janssen'
 
+colormap (parula)
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Looking at the components from the far field equation
@@ -68,7 +113,7 @@ caxis([0,0.0000001])
 polarmap
 colorbar
 title 'tot B Ffeq'
-
+colormap (parula)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Looking at the components from the dipole equation
@@ -77,14 +122,14 @@ title 'tot B Ffeq'
 figure(5)
 clf
 subplot(2,2,1)
-slice(space(1).X,space(1).Y,space(1).Z,field(partno).Bx , 0.0005,0,[])
+slice(space(1).X,space(1).Y,space(1).Z,field(partno).Bx , 0.0002,0,[])
 caxis([-0.00001,0.00001])
 polarmap
 colorbar
 title 'X component'
 
 subplot(2,2,2)
-slice(space(1).X,space(1).Y,space(1).Z,field(partno).By , 0,0.0005,[])
+slice(space(1).X,space(1).Y,space(1).Z,field(partno).By , 0,0.0002,[])
 caxis([-0.00001,0.00001])
 polarmap
 colorbar
@@ -104,7 +149,7 @@ polarmap
 colorbar
 title 'Tot B Dipole eq'
 
-%colormap(parula)
+colormap(parula)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -142,7 +187,7 @@ polarmap
 colorbar
 title 'Tot B Curl'
 
-%colormap(parula)
+colormap(parula)
 
 %subplot(2,2,3)
 %hold on
@@ -179,15 +224,14 @@ quivy = space(1).Y(:,:,plane);
 figure(7)
 
 clf
-colorbar
 imagesc(space(1).Xline, space(1).Yline,dat)
 hold on 
 quiver(quivx,quivy,quivdatX,quivdatZ)
-title ('2D plane of 3D output')
+title ('2D plane of 3D output field')
+colorbar
+
 
 %%
-
-plane = size(crl(nP).curly,2)/2;
 
 dat = crl(1).totBcrl(:,:,plane);
 reszemat = size(dat);
@@ -217,11 +261,12 @@ quivx = space(1).X(:,:,plane);
 quivz = space(1).Z(:,:,plane);
 quivy = space(1).Y(:,:,plane);
 
-figure(7)
+figure(9)
 
 clf
-colorbar
 imagesc(space(1).Xline, space(1).Yline,dat)
 hold on 
 quiver(quivx,quivy,quivdatX,quivdatZ)
-title ('2D plane of 3D output')
+title ('2D plane of 3D output crl')
+caxis([0,0.001])
+colorbar

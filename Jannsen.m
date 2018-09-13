@@ -1,4 +1,4 @@
-function [HxAkoun, HyAkoun, HzAkoun] = Jannsen(nX,nY,nZ,Rx,Ry,Rz,cell_size,Mag)
+function [HxAkoun, HyAkoun, HzAkoun] = Jannsen(Rx,Ry,Rz,cell_size)
 
 HxAkoun  = 0;
 HyAkoun  = 0;

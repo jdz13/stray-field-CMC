@@ -86,7 +86,9 @@ for nP = 1:length(find(Mag))
         A = mu0/4/pi.*cross(space(nP).momV, rvec)./(space(nP).modR(nX,nY,nZ)^3);
         [crl(nP).Ax(nX,nY,nZ), crl(nP).Ay(nX,nY,nZ), crl(nP).Az(nX,nY,nZ)] = field_comps(A(1), A(2), A(3));
         
-        [Akoun(nP).HxAkoun(nX,nY,nZ), Akoun(nP).HyAkoun(nX,nY,nZ), Akoun(nP).HzAkoun(nX,nY,nZ)] = Jannsen(nX,nY,nZ,space(nP).Rx(nX,nY,nZ),space(nP).Ry(nX,nY,nZ),space(nP).Rz(nX,nY,nZ),cell_size,Mag);
+        [Akoun(nP).HxAkoun(nX,nY,nZ), Akoun(nP).HyAkoun(nX,nY,nZ), Akoun(nP).HzAkoun(nX,nY,nZ)] = Jannsen(space(nP).Rx(nX,nY,nZ),space(nP).Ry(nX,nY,nZ),space(nP).Rz(nX,nY,nZ),cell_size);
+        
+        [MagH(nP).HxMagH(nX,nY,nZ), MagH(nP).HyMagH(nX,nY,nZ), MagH(nP).HzMagH(nX,nY,nZ)] = Jannsen(space(nP).Rx(nX,nY,nZ),space(nP).Ry(nX,nY,nZ),space(nP).Rz(nX,nY,nZ),cell_size);
         
             end 
         end
@@ -112,7 +114,12 @@ for nP = 1:length(find(Mag))
     crl(nP).modBcrl = sqrt(crl(nP).curlx.^2 + crl(nP).curly.^2 + crl(nP).curlz.^2); 
     crl(1).totBcrl = crl(1).totBcrl + crl(nP).modBcrl;
     
-    Akoun(nP).modBAkoun = sqrt(Akoun(nP).HxAkoun.^2 + Akoun(nP).HxAkoun.^2 + Akoun(nP).HxAkoun.^2);
+    
+    [Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun] = multiply(Msat*mu0/4/pi,Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun);
+    Akoun(nP).modBAkoun = sqrt(Akoun(nP).HxAkoun.^2 + Akoun(nP).HyAkoun.^2 + Akoun(nP).HzAkoun.^2);
+    
+    [MagH(nP).HxMagH, MagH(nP).HyMagH, MagH(nP).HzMagH] = multiply (mu0*Msat/4/pi, MagH(nP).HxMagH, MagH(nP).HyMagH, MagH(nP).HzMagH);
+    MagH(nP).modBMagH = sqrt(MagH(nP).HxMagH.^2 + MagH(nP).HyMagH.^2 + MagH(nP).HzMagH.^2);
     
 end 
 
@@ -144,7 +151,7 @@ title 'Negative charges'
 
 figure(2)
 slice(space(1).X,space(1).Y,space(1).Z, field(1).totZ, 0,0,0)
-caxis([-0.0000001,0.0000001])
+caxis([-0.0001,0.0001])
 colorbar
 %hold on 
 %quiver3(space(1).X,space(1).Y,space(1).Z,field(1).totXfil,field(1).totYfil,field(1).totZfil);
