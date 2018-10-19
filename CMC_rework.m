@@ -17,7 +17,7 @@ mu0 = 4* pi * 10^-7; % [H/m] SI.
 grid_size = [50,50,50];
 
 world_range = [10^-3, 10^-3, 10^-3];
-cell_size = world_range./grid_size;
+cell_size = 2.*world_range./grid_size;
 
 extra = 0; %  10^-10; % [m]
 
@@ -29,7 +29,7 @@ space.Zline = linspace(-world_range(3),world_range(3),grid_size(3))+extra;
 
 space.radialN = sqrt(space.X.^2 + space.Y.^2 + space.Z.^2); %[m^3]
 
-space.volume = prod(world_range./grid_size); % [m^3]
+space.volume = prod(2.*world_range./grid_size); % [m^3]
 
 
 % Now making the magnetic vector.
@@ -88,7 +88,7 @@ for nP = 1:length(find(Mag))
         
         [Akoun(nP).HxAkoun(nX,nY,nZ), Akoun(nP).HyAkoun(nX,nY,nZ), Akoun(nP).HzAkoun(nX,nY,nZ)] = Jannsen(space(nP).Rx(nX,nY,nZ),space(nP).Ry(nX,nY,nZ),space(nP).Rz(nX,nY,nZ),cell_size);
         
-        [MagH(nP).HxMagH(nX,nY,nZ), MagH(nP).HyMagH(nX,nY,nZ), MagH(nP).HzMagH(nX,nY,nZ)] = Jannsen(space(nP).Rx(nX,nY,nZ),space(nP).Ry(nX,nY,nZ),space(nP).Rz(nX,nY,nZ),cell_size);
+        [MagH(nP).HxMagH(nX,nY,nZ), MagH(nP).HyMagH(nX,nY,nZ), MagH(nP).HzMagH(nX,nY,nZ)] = Magstat(space(nP).Rx(nX,nY,nZ),space(nP).Ry(nX,nY,nZ),space(nP).Rz(nX,nY,nZ),cell_size);
         
             end 
         end
@@ -118,7 +118,7 @@ for nP = 1:length(find(Mag))
     [Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun] = multiply(Msat*mu0/4/pi,Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun);
     Akoun(nP).modBAkoun = sqrt(Akoun(nP).HxAkoun.^2 + Akoun(nP).HyAkoun.^2 + Akoun(nP).HzAkoun.^2);
     
-    [MagH(nP).HxMagH, MagH(nP).HyMagH, MagH(nP).HzMagH] = multiply (mu0*Msat/4/pi, MagH(nP).HxMagH, MagH(nP).HyMagH, MagH(nP).HzMagH);
+    [MagH(nP).HxMagH, MagH(nP).HyMagH, MagH(nP).HzMagH] = multiply (mu0*Msat, MagH(nP).HxMagH, MagH(nP).HyMagH, MagH(nP).HzMagH);
     MagH(nP).modBMagH = sqrt(MagH(nP).HxMagH.^2 + MagH(nP).HyMagH.^2 + MagH(nP).HzMagH.^2);
     
 end 

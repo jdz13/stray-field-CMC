@@ -1,5 +1,10 @@
-function [HxMagH, HyMagH, HzMagH] = MagH(Rx,Ry,Rz,cell_size)
+function [HxMagH, HyMagH, HzMagH] = Magstat(Rx,Ry,Rz,cell_size)
 %MAGH Summary of this function goes here
+
+cell_size = cell_size./2;
+HxMagH  = 0;
+HyMagH  = 0;
+HzMagH  = 0;
 %   Detailed explanation goes here
              for k = 1:2
                 for l = 1:2

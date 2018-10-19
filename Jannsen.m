@@ -1,5 +1,8 @@
 function [HxAkoun, HyAkoun, HzAkoun] = Jannsen(Rx,Ry,Rz,cell_size)
 
+
+cell_size = cell_size./2;
+
 HxAkoun  = 0;
 HyAkoun  = 0;
 HzAkoun  = 0;
