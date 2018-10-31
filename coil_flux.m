@@ -26,7 +26,14 @@ for nX = 1:length(px)
             
             if (px(nX)^2)+(py(nY)^2) <= rmask^2
                 mask(nX,nY) = 1;
+<<<<<<< HEAD
             end+
+=======
+            end
+            
+        end 
+    end 
+>>>>>>> test
 end
 
 [Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun] = multiply(Msat*mu0/4/pi,Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun);
