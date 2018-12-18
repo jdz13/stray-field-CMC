@@ -16,14 +16,12 @@ mu0 = 4* pi * 10^-7; % [H/m] SI.
 
 grid_size = [50,50,50];
 
-world_range = [10^-3, 10^-3, 10^-3];
+world_range = [89.5*10^-2, 89.5*10^-2, 89.5*10^-2];
 cell_size = 2.*world_range./grid_size;
 
-extra = 0; %  10^-10; % [m]
-
-space.Xline = linspace(-world_range(1),world_range(1),grid_size(1))+extra;
-space.Yline = linspace(-world_range(2),world_range(2),grid_size(2))+extra;
-space.Zline = linspace(-world_range(3),world_range(3),grid_size(3))+extra;
+space.Xline = linspace(-world_range(1)+cell_size(1)/2,world_range(1)-cell_size(1)/2,grid_size(1));
+space.Yline = linspace(-world_range(2)+cell_size(2)/2,world_range(2)-cell_size(2)/2,grid_size(2));
+space.Zline = linspace(-world_range(3)+cell_size(3)/2,world_range(3)-cell_size(3)/2,grid_size(3));
 
 [space.X,space.Y,space.Z] = meshgrid(space.Xline, space.Yline, space.Zline);
 
@@ -43,7 +41,7 @@ unimagV = [ 0 0 1 ];
 Mag(grid_size(1)/2:grid_size(1)/2+1,grid_size(2)/2:grid_size(2)/2+1,grid_size(3)/2)=1;
 Mag(grid_size(1)/2:grid_size(1)/2+1,grid_size(2)/2:grid_size(2)/2+1,grid_size(3)/2+1)=-1;
 
-Msat = 10^6; % [Am^2]
+Msat = 1.27*10^6; % [Am^2]
 
 scaling = Msat*space.volume; % To be factored into the Dirac delta functions 
 
