@@ -1,7 +1,12 @@
 % spy is also a great tool for 2D ploits, not so good for 3D
 
+Akoun(1).totB = 0;
+for l = 1:length(Akoun)
+Akoun(1).totB = Akoun(1).totB + Akoun(l).modBAkoun;
+end
 
-TEST66 = ((Akoun(partno).modBAkoun)-BtotMumax)./BtotMumax;
+
+TEST66 = ((Akoun(1).totB)-BtotMumax)./BtotMumax;
 Testproof = TEST66<= 0.001;
 
 Testproof1pc = TEST66>= 0.01;
