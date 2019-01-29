@@ -2,20 +2,22 @@ clear
 
 tic
 
-Msat = 1.27e6; % M_sat of the particle - Neodymium has Msat 1.27e-6 [A/m];
+Msat = 1e6; %1.27e6; % M_sat of the particle - Neodymium has Msat 1.27e-6 [A/m];
 
 mu0 = 4* pi * 10^-7; % [H/m] SI.
 
+displace = [0,0,0]; %[-2e-5,-2e-5,-2e-5];
+
 grid_size = [50,50,50];
 
-world_range =  [89.5*10^-2, 89.5*10^-2, 89.5*10^-2];
+world_range =  [1e-3,1e-3,1e-3];%[89.5*10^-2, 89.5*10^-2, 89.5*10^-2];
 cell_size = 2.*world_range./grid_size;
 
-px = linspace(-world_range(1)+cell_size(1)/2,world_range(1)-cell_size(1)/2,grid_size(1));
-py = linspace(-world_range(2)+cell_size(2)/2,world_range(2)-cell_size(2)/2,grid_size(2));
-pZ = linspace(-world_range(3)+cell_size(3)/2,world_range(3)-cell_size(3)/2,grid_size(3)); % If only one plane is wanted, fill this here [m]
+px = linspace(-world_range(1)+cell_size(1)/2,world_range(1)-cell_size(1)/2,grid_size(1))+displace(1);
+py = linspace(-world_range(2)+cell_size(2)/2,world_range(2)-cell_size(2)/2,grid_size(2))+displace(2);
+pZ = linspace(-world_range(3)+cell_size(3)/2,world_range(3)-cell_size(3)/2,grid_size(3))+displace(3); % If only one plane is wanted, fill this here [m]
 
-cl = 1.79e-2; % If cuboidal, this is the dimension [m]
+cl = 4e-5; %1.79e-2; % If cuboidal, this is the dimension [m]
 
 mag_size = [cl,cl,cl];
 
@@ -41,7 +43,7 @@ if rem(nP,100) == 0
 nP % checker for longer sets, outputs every hundred so know where it's at. 
 end
 [Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun] = multiply(...
-    Msat*mu0/4/pi,Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun);
+    Msat*mu0/4/pi,Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun);*
 
 Akoun(nP).modBAkoun = sqrt(Akoun(nP).HxAkoun.^2 + Akoun(nP).HyAkoun.^2 + Akoun(nP).HzAkoun.^2);
 pzplot(nP) = pz; % Multiplying in the constants.

@@ -1,38 +1,49 @@
 % spy is also a great tool for 2D ploits, not so good for 3D
 
-Akoun(1).totB = 0;
-for l = 1:length(Akoun)
-Akoun(1).totB = Akoun(1).totB + Akoun(l).modBAkoun;
+BtotMumax = sqrt(Bx.^2 + By.^2  + Bz.^2);
+
+
+
+Test_struc.TESTVI = ((Akoun(1).modBAkoun)-BtotMumax)./BtotMumax;% ((Akoun(1).totB)-BtotMumax)./BtotMumax;
+Test_struc.Testproof = Test_struc.TESTVI<= 0.001;
+
+Test_struc.Testproof1pc = abs(Test_struc.TESTVI)>= 0.01;
+Test_struc.s1pc = nonzeros(Test_struc.Testproof1pc);
+
+Test_struc.Testproofp2pc = abs(Test_struc.TESTVI)>= 0.002;
+Test_struc.sp2pc = nonzeros(Test_struc.Testproofp2pc);
+
+Test_struc.Testproofp3pc = abs(Test_struc.TESTVI)>= 0.003;
+Test_struc.sp3pc = nonzeros(Test_struc.Testproofp3pc);
+
+Test_struc.Testproofp4pc = abs(Test_struc.TESTVI)>= 0.004;
+Test_struc.sp4pc = nonzeros(Test_struc.Testproofp4pc);
+
+Test_struc.Testproofp5pc = abs(Test_struc.TESTVI)>= 0.005;
+Test_struc.sp5pc = nonzeros(Test_struc.Testproofp5pc);
+
+
+ind = find(Test_struc.Testproof1pc);
+[fx, fy, fz] = ind2sub(size(Test_struc.Testproof1pc), ind);
+
+for trail = 1:length(fx)
+values(trail) = Test_struc.TESTVI(fx(trail),fy(trail),fz(trail));
+loc (trail) = {[num2str(fx(trail)),',',num2str(fy(trail)),',',num2str(fz(trail))]};
 end
+clear trail 
 
+Test_struc.finders.fx = fx; Test_struc.finders.fy = fy; Test_struc.finders.fz = fz; 
+Test_struc.finders.ind = ind; Test_struc.graph.values = values; Test_struc.graph.loc = loc;
 
-TEST66 = ((Akoun(1).totB)-BtotMumax)./BtotMumax;
-Testproof = TEST66<= 0.001;
+clear ind fx fy fz values loc
 
-Testproof1pc = TEST66>= 0.01;
-s1pc = nonzeros(Testproof1pc);
-
-Testproofp2pc = TEST66>= 0.002;
-sp2pc = nonzeros(Testproofp2pc);
-Testproofp3pc = TEST66>= 0.003;
-sp3pc = nonzeros(Testproofp3pc);
-
-Testproofp4pc = TEST66>= 0.004;
-sp4pc = nonzeros(Testproofp4pc);
-Testproofp5pc = TEST66>= 0.005;
-sp5pc = nonzeros(Testproofp5pc);
-
-
-for trail = 1:length(findx)
-values(trail) = TEST66(findx(trail),findy(trail),findz(trail));
-loc (trail) = {[num2str(findx(trail)),',',num2str(findy(trail)),',',num2str(findz(trail))]};
-end
-
-cats = categorical(loc);
-
+Test_struc.graph.cats = categorical(Test_struc.graph.loc);
+%%
 figure(12)
-bar(cats,values*100)
-xlabel 'Location'
-ylabel 'Percentage error'
-title 'Percentage error locations over 1%'
-
+subplot(1,3,1)
+bar(Test_struc.graph.cats,Test_struc.graph.values*100); xlabel 'Location';  ylabel 'Percentage error'
+title 'Percentage error locations over 1%' ;
+subplot(1,3,[2,3])
+slice(space(1).X,space(1).Y,space(1).Z, Test_struc.TESTVI*100, 0,0,[])
+title 'Percentage error over all space'; colorbar; 
+caxis([-1,1]);

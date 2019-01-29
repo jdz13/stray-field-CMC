@@ -19,9 +19,11 @@ grid_size = [50,50,50];
 world_range = [1e-3,1e-3,1e-3];
 cell_size = 2.*world_range./grid_size;
 
-space.Xline = linspace(-world_range(1)+cell_size(1)/2,world_range(1)-cell_size(1)/2,grid_size(1));
-space.Yline = linspace(-world_range(2)+cell_size(2)/2,world_range(2)-cell_size(2)/2,grid_size(2));
-space.Zline = linspace(-world_range(3)+cell_size(3)/2,world_range(3)-cell_size(3)/2,grid_size(3));
+displacement = [0,0,0];
+
+space.Xline = linspace(-world_range(1)+cell_size(1)/2,world_range(1)-cell_size(1)/2,grid_size(1))+displacement(1);
+space.Yline = linspace(-world_range(2)+cell_size(2)/2,world_range(2)-cell_size(2)/2,grid_size(2))+displacement(2);
+space.Zline = linspace(-world_range(3)+cell_size(3)/2,world_range(3)-cell_size(3)/2,grid_size(3))+displacement(3);
 
 [space.X,space.Y,space.Z] = meshgrid(space.Xline, space.Yline, space.Zline);
 

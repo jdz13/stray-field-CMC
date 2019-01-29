@@ -6,13 +6,13 @@ Msat = 1e6;
 
 mu0 = 4*pi*1e-7;
 
-px = linspace(-5e-2,5e-2,50);
-py = linspace(-5e-2,5e-2,50);
+px = linspace(-5e-3,5e-3,500);
+py = linspace(-5e-3,5e-3,500);
 pz = 1e-6;
 
 area = ( px(2)-px(1))*( py(2)-py(1));
 
-mag_size = [1e-2,1e-2,1e-2];
+mag_size = [2e-5,2e-5,2e-8];
 
 mask = ones(length(px), length(py));
 rmask = 5e-3;
@@ -20,7 +20,7 @@ rmask = 5e-3;
 nP = 0; 
 mP = 0;
 
-for pz = linspace(-5e-2,5e-2,100)
+for pz = linspace(0,1e-4,100)
     nP = nP+1;
 for nX = 1:length(px)
     for nY = 1:length(py)
@@ -38,7 +38,7 @@ for nX = 1:length(px)
     end 
 end
 if rem(nP,100) == 0
-nP
+disp(nP)
 end
 [Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun] = multiply(...
     Msat*mu0/4/pi,Akoun(nP).HxAkoun, Akoun(nP).HyAkoun, Akoun(nP).HzAkoun);
@@ -51,7 +51,7 @@ pzplot(nP) = pz;
 end 
 
 
-for rmask = linspace(5e-4,5e-2,21)
+for rmask = linspace(5e-4,5e-3,21)
     mP = mP+1;
     Mask_fac(mP).mask = zeros(length(px), length(py));
     for nX = 1:length(px)

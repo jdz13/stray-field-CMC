@@ -17,7 +17,7 @@ end
 
 
 
-% squares
+squares
  
 if shape == 'square'
     
@@ -43,14 +43,14 @@ end
 %-------------------------------------------------------------------------
 
 % circles 
-if shape == 'circle'
+if shape == 'sphere'
    
     
     Mask = zeros(length(px), length(py),length(pz));
     for nX = 1:length(px)
         for nY = 1:length(py)
             for nZ = 1:length(pz)     
-                if (px(nX)^2)+(py(nY)^2) <= rmask^2
+                if (px(nX)^2)+(py(nY)^2) +(pz(nZ)^2)<= magdim(1)^2
                     Mask(nX,nY) = 1;
                 end
             end
@@ -59,7 +59,24 @@ if shape == 'circle'
     
 end 
 
+%------------------------------------------------------------------------
 
+% discs 
+if shape == 'disc-z'
+   
+    
+    Mask = zeros(length(px), length(py),length(pz));
+    for nX = 1:length(px)
+        for nY = 1:length(py)
+            for nZ = 1:length(pz)     
+                if (px(nX)^2)+(py(nY)^2) <= magdim(1)^2 && (pz(nZ)) <= magdim(2)
+                    Mask(nX,nY) = 1;
+                end
+            end
+        end
+    end
+    
+end 
 
 
 end 
