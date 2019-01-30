@@ -25,6 +25,7 @@ loe = 1;
 
 Magcl = linspace(4e-3,2e-2,10);
 
+
 for cl = Magcl
 
 mag_size = [cl,cl,cl];
@@ -54,7 +55,9 @@ end
 sanity = fwhmx - (Magcl./2);
 
 figure(123)
+
 plot(Magcl, sanity)
+
 ylabel 'Decay length (m)'; xlabel 'Magnet cuboidal length(m)'
 
 %%

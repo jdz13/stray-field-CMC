@@ -38,7 +38,11 @@ pZ = linspace(-world_range(3)+cell_size(3)/2,world_range(3)-cell_size(3)/2,grid_
 [X,Y,Z] = meshgrid(px,py,pZ);
 [max] = MiddleVariableLine(BMumax);
 
+<<<<<<< HEAD
 figure(140)
+=======
+figure(28)
+>>>>>>> test
 subplot(2,2,1)
 plot(pZ,max)
  xlabel 'Distance from magnet centre (m)'; ylabel 'Field (T)'
@@ -49,5 +53,9 @@ semilogy(pZ,max)
  title 'Log-scale'
 subplot(2,2,[2 4])
 slice(X,Y,Z,BMumax,0,0,0)
+<<<<<<< HEAD
 title '3D display of field'; colorbar
 xlabel 'X (m)'; ylabel 'Y (m)'; zlabel 'Z(m)'
+=======
+title '3D display of field'; colorbar
+>>>>>>> test
