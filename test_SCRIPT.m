@@ -23,7 +23,7 @@ pZ = linspace(0,world_range(3), grid_size(3));
 
 loe = 1;
 
-Magcl = linspace(4e-3,2e-2,100);
+Magcl = linspace(4e-3,2e-2,10);
 
 for cl = Magcl
 
@@ -54,7 +54,7 @@ end
 sanity = fwhmx - (Magcl./2);
 
 figure(123)
-plot(Magcl, sanity,'bo')
+plot(Magcl, sanity)
 ylabel 'Decay length (m)'; xlabel 'Magnet cuboidal length(m)'
 
 %%

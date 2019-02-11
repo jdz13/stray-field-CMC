@@ -30,21 +30,14 @@ for nX = 1:length(px)
                 Akoun(nP).HzAkoun(nX,nY,nZ)] = Jannsen(px(nX),py(nY),...
                 pz(nZ),mag_size);
             
-<<<<<<< HEAD
-            if (px(nX)^2)+(py(nY)^2) <= rmask^2
-                mask(nX,nY) = 1;
-<<<<<<< HEAD
-            end+
-=======
-=======
+
             if (px(nX)^2)+(py(nY)^2) >= rmask^2
                 mask(nX,nY) = 0;
->>>>>>> test
+
             end
             
         end 
     end 
->>>>>>> test
 end
 if rem(nP,100) == 0
 disp(nP)
