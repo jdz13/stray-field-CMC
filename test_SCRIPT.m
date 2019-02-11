@@ -25,7 +25,6 @@ loe = 1;
 
 Magcl = linspace(4e-3,2e-2,10);
 
-
 for cl = Magcl
 
 mag_size = [cl,cl,cl];
