@@ -54,7 +54,9 @@ end
 sanity = fwhmx - (Magcl./2);
 
 figure(123)
+
 plot(Magcl, sanity)
+
 ylabel 'Decay length (m)'; xlabel 'Magnet cuboidal length(m)'
 
 %%
