@@ -27,7 +27,7 @@ PM_mag_size = [PM_cl,PM_cl,PM_cl]; % [m]
 sample.r_spread = 1e-3;
 particle_loc = plane_mask(sample.px,sample.py,sample.r_spread); control = sum(sum(particle_loc));
 
-sample_mag_size = [2e-5, 2e-5, 2e-8];
+sample.mag_size = [2e-5, 2e-5, 2e-8];
 
 coil.plane_N = [200,200];
 coil.plane_lengths =  [5e-2,5e-2]; % [m] plus/minus extents to 
@@ -39,11 +39,11 @@ coil.pZ = 1e-4; % Only one plane is wanted, fill this here [m]
 
 Rcoil = 5e-3;
 
-[coilfield(1), coilpz(1), coilBmax] = PMnotFD(sample_mag_size, coil.px,coil.py,coil.pZ, Msat_part, sample.displacement);
+[coilfield(1), coilpz(1), coil.Bmax] = PMnotFD(sample.mag_size, coil.px,coil.py,coil.pZ, Msat_part, sample.displacement);
 
-coil_mask = plane_mask(coil.px,coil.py,Rcoil); area = (coil.px(2)-coil.px(1))*(coil.py(2)-coil.py(1));
+coil.mask = plane_mask(coil.px,coil.py,Rcoil); area = (coil.px(2)-coil.px(1))*(coil.py(2)-coil.py(1));
 
-flux_cap = sum(sum(coil_mask.*coilfield.HzAkoun*area));
+flux_cap = sum(sum(coil.mask.*coilfield.HzAkoun*area));
       
 
 theta_end = 2*pi; theta_n =  181;
