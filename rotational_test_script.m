@@ -46,12 +46,12 @@ coil_mask = plane_mask(coil.px,coil.py,Rcoil); area = (coil.px(2)-coil.px(1))*(c
 flux_cap = sum(sum(coil_mask.*coilfield.HzAkoun*area));
       
 
-theta_end = 8*pi; theta_n =  721;
+theta_end = 2*pi; theta_n =  181;
 theta = linspace(0,theta_end, theta_n); 
 vol_compa = zeros(1,length(theta));
 
 
-swfield = 0.04; % [T]
+swfield = 0.4; % [T]
 Npart = 1000; % Number of particles, scalar factor
 
 np = 1;

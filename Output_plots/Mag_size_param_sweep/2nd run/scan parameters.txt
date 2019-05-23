@@ -1,0 +1,31 @@
+PZ = PZset; %0.042; %linspace(5e-2,3e-2,21);
+swfield = [linspace(0.4, 0.1,7),linspace(0.08,0.02,4)];
+theta_end = 2*pi; theta_n =  721;
+theta = linspace(0,theta_end, theta_n); 
+sampspac = 1e-3; % sampspac =linspace(2.5e-4,2e-3,8);
+pm_cl = linspace(1e-2,5e-2,5); % = linspace(1e-2,5e-2,9); %1.79e-2;  % If cuboidal, this is the dimension [m]
+
+
+for sc = 1:length(sampspac)
+for k = size(PZ,2):-1:1    % Backwards!
+  norm_vol_comp(k,sc).data = zeros(theta_n, size(swfield,2));
+  thetad(k,sc).data = zeros(1,theta_n);
+  diphis(k,sc).data = zeros(theta_n-1, size(swfield,2));
+end
+end
+
+for pm = 1:length(pm_cl)
+    PZ = PZset + (pm_cl(pm)/2);
+for sp = 1:length(sampspac)
+for nm = 1:size(PZ,2)
+    [norm_vol_comp(nm,sp,pm).data, thetad(nm,sp,pm).data, diphis(nm,sp,pm).data] = rot_V2(PZ(nm),swfield,theta,sampspac(sp),pm_cl(pm));
+    toc
+    count = count+1;
+    if rem(count, 20) == 0
+        disp(count)
+    end
+end
+end 
+end
+
+clear nm sp pm sc k
