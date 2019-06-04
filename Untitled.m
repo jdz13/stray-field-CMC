@@ -15,8 +15,8 @@
 
 %%
 
-mainoption = 5;
-secondaryoption = 2;
+mainoption = 4;
+secondaryoption = 4;
 thirdoption = 0; 
 
 %-------------------------------------------------------------------------
@@ -43,7 +43,7 @@ if mainoption == 1
 elseif mainoption == 2
     
     figno = 21; 
-    nm = 16; % z height location in array;
+    nm = 1; % z height location in array;
     sp = 1; % sample space in array 
     pm = 6; % magnet size in array
     figure(figno); clf; subplot(2,1,1);hold on; subplot(2,1,2);hold on;
@@ -217,6 +217,14 @@ elseif mainoption == 4
             ax = gca; trial = linspace(ax.YLim(1),ax.YLim(2),length(swfield)+1);
             trial = trial - (trial(2)-trial(1))/2;    trial(1) = [];
             yticks(trial);    yticklabels((swfield));
+              
+        elseif secondaryoption == 4
+            thrs = 0.2; 
+            B = sum((plotter <= thrs).*( ne(plotter,0)), 1); lims = [0,max(B)+1];
+            figure(figno); plot(pm_cl*100, B); xlabel 'Magnet size (cm)';  
+            ylabel(['Number of channels <', num2str(thrs)]); ylim(lims);
+            title (['Number of channels under a threshold of ', num2str(thrs), ' for a read first configuration'])
+                    
         else 
             disp 'invalid secondaryoption - please choose another'
         end 
@@ -308,7 +316,7 @@ elseif mainoption == 5
         
     elseif secondaryoption == 2 
         
-        thrv = 1;
+        thrv = 2;
         figure(figno); clf; hold on;
         xlabel 'Field (T)'; ylabel (['Number of channels under threshold ', num2str(thrshld(thrv))]);
         
@@ -328,7 +336,46 @@ elseif mainoption == 5
         xlabel 'Field (T)'; ylabel 'magnet size (m)';
         title (['no of channels below threshold of ',num2str(thrshld(thrv))])
         clear thrv
-    else 
+      
+        
+    elseif secondaryoption == 4 
+        
+        thrv = 2; fieldpos = zeros(1, length(pm_cl));
+        
+        for mgs = 1:length(pm_cl)
+                       
+            line = reshape(plotter(mgs, :,thrv),[1,length(swfield)]);
+            tet = max(line); ff = find(line == tet);
+            fieldpos(mgs) = swfield(ff(1));
+        clear line tet ff
+        end
+        
+        figure(figno); clf; plot(pm_cl*100, fieldpos);
+        xlabel 'Magnet size (cm)'; ylabel 'Field at max number of channels';
+        title (['Field at max channel number under threshold ', num2str(thrshld(thrv)), ' for differing magnet size'])
+        
+        
+    elseif secondaryoption == 5
+        
+        fieldpos = zeros(1, length(pm_cl)); figure(figno); clf; hold on;
+        xlabel 'Magnet size (cm)'; ylabel 'Field at max number of channels';
+        title 'Field at max channel number under different thresholds for differing magnet size'
+        
+        for thrv = 1:length(thrshld)
+        for mgs = 1:length(pm_cl)
+                       
+            line = reshape(plotter(mgs, :,thrv),[1,length(swfield)]);
+            tet = max(line); ff = find(line == tet);
+            fieldpos(mgs) = swfield(ff(1));
+        clear line tet ff
+        end
+        plot(pm_cl*100, fieldpos);
+        end
+        legendCell = cellstr(num2str(thrshld', 'Threshold =%-g')); legend(legendCell,'Location','Northwest')
+        
+        clear mgs thrv
+         
+    else     
         disp 'Invalid secondaryoption, please try another'
     end 
 %-------------------------------------------------------------------------

@@ -26,14 +26,14 @@ if option == 1
     clear
     
     count = 0;
-    PZset = linspace(2.5e-2,10e-2,31);
+    PZset = linspace(2e-2,12e-2,26);
     
 PZ = PZset; %0.042; %linspace(5e-2,3e-2,21);
-swfield = [linspace(0.4, 0.1,7),linspace(0.08,0.02,4)];
-theta_end = 2*pi; theta_n =  721;
+swfield = [2005,1703,1385, 1099, 798, 579, 427, 261, 150, 40]./1e4; %[linspace(0.4, 0.1,7),linspace(0.08,0.02,4)];
+theta_end = pi; theta_n =  361;
 theta = linspace(0,theta_end, theta_n); 
 sampspac = 1e-3; % sampspac =linspace(2.5e-4,2e-3,8);
-pm_cl = linspace(1e-2,5e-2,9); %1.79e-2;  % If cuboidal, this is the dimension [m]
+pm_cl = linspace(1e-2,4e-2,16); %1.79e-2;  % If cuboidal, this is the dimension [m]
 
 
 for sc = 1:length(sampspac)
