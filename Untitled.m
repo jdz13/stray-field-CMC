@@ -15,8 +15,8 @@
 
 %%
 
-mainoption = 4;
-secondaryoption = 4;
+mainoption = 5;
+secondaryoption = 5;
 thirdoption = 0; 
 
 %-------------------------------------------------------------------------
@@ -219,12 +219,23 @@ elseif mainoption == 4
             yticks(trial);    yticklabels((swfield));
               
         elseif secondaryoption == 4
-            thrs = 0.2; 
+            thrs =0.2; 
             B = sum((plotter <= thrs).*( ne(plotter,0)), 1); lims = [0,max(B)+1];
             figure(figno); plot(pm_cl*100, B); xlabel 'Magnet size (cm)';  
             ylabel(['Number of channels <', num2str(thrs)]); ylim(lims);
             title (['Number of channels under a threshold of ', num2str(thrs), ' for a read first configuration'])
-                    
+      
+        elseif secondaryoption == 5
+            figure(figno); hold on; ylabel 'Number of channels <threshold'; xlabel 'Magnet size (cm)';
+            title ('Number of channels under a threshold for a read first configuration')
+            for thrs = [0.1,0.2,0.3,0.4,0.5]
+            B = sum((plotter <= thrs).*( ne(plotter,0)), 1); 
+            plot(pm_cl*100, B);   
+            lims = [0,max(B)+1];        ylim(lims);
+            end 
+            thrs = [0.1,0.2,0.3,0.4,0.5];
+            legendCell = cellstr(num2str(thrs', 'Threshold =%-g')); legend(legendCell,'Location','Northwest')
+            
         else 
             disp 'invalid secondaryoption - please choose another'
         end 
@@ -296,6 +307,7 @@ elseif mainoption == 5
     % secondary option 2 - show all magsize graphs overlaid for one
     % threshold
     % secondary option 3 - 2D graph - all data. (one threshold
+    
     
     if secondaryoption == 0
         

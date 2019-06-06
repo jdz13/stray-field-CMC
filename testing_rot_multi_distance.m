@@ -18,13 +18,14 @@
 tic
 
 %-------------------------------------------------------------------------
-option = 3;
+option = 1;
 %-------------------------------------------------------------------------
 
 if option == 1 
 
     clear
-    
+
+    howlong(1) = datetime;
     count = 0;
     PZset = linspace(2e-2,12e-2,26);
     
@@ -59,6 +60,9 @@ end
 end
 toc
 clear nm sp pm sc k
+    howlong(2) = datetime;
+d = date; curfol = pwd; str = [curfol,'\magsize_results_',d];
+save(str);
 
 %% ------------------------------------------------------------------------
 tic
@@ -132,14 +136,16 @@ for nm = 1:size(PZ,2)
 for sf = 1:length(swfield)
 for pm = 1:length(pm_cl)
     
-     temp.testline = diphis(nm,sp,pm).data(:,sf);
+     temp.testline = (diphis(nm,sp,pm).data(:,sf));
     
-    temp.maxfield = max(diphis(nm,sp,pm).data(:,sf));
-    temp.TESTMAT =(diphis(nm,sp,pm).data(:,sf)) == temp.maxfield;
+    temp.maxfield = max(temp.testline);
+    temp.TESTMAT = temp.testline == temp.maxfield;
     [K,L] = find(temp.TESTMAT);
     
     temp.indthet1 = [0,0];
-    temp.indthet1(1) = find(temp.testline >= 0.01*temp.maxfield ,1,'first');
+    temp.indthet1(1) = find(temp.testline >= 0.01*temp.maxfield ,1,'first'); 
+    % Takes 1% of the max values so that only the switch is looked at in
+    % the fwhm indexing - don't worry about the value here.
     temp.indthet1(2) = temp.indthet1(1)+find(temp.testline(temp.indthet1(1):length(temp.testline)) <= 0.01*temp.maxfield ,1,'first');
         
              temp.tlfwhm = temp.testline(temp.indthet1(1):temp.indthet1(2));
