@@ -15,7 +15,7 @@
 
 %%
 
-mainoption = 5;
+mainoption = 4;
 secondaryoption = 5;
 thirdoption = 0; 
 
@@ -166,7 +166,7 @@ elseif mainoption == 4
     
     % Need to choose which switching field to use, almost like a threshold.
     plotter = zeros(length(swfield),length(pm_cl));
-    figno = 42;
+    figno = 40;
     figure(figno); clf;
     
     for ko = 1:length(swfield)
