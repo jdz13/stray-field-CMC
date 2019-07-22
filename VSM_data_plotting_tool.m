@@ -1,7 +1,9 @@
 
 % clear
 
-zz = fol_data_ext_function();
+%zz = fol_data_ext_function();
+
+zz = zz_CoFeB_sample;
 
 %%
 
@@ -21,6 +23,13 @@ for tr = 1:size(zz,1)
      newSt = erase(zz(tr).name,vhd);
      newStr = strrep(newSt, '_', ' ');
     
+
+     if size(zz(tr).data,2) == 13 
+         sec = 12;
+     elseif size(zz(tr).data,2) == 11 
+         sec = 11;
+     end
+     
 figure(figno); clf; 
 subplot (2,2,1); 
 plot(zz(tr).data(:,8), zz(tr).data(:,10))
@@ -28,7 +37,7 @@ xlabel 'Applied field (Oe)'
 ylabel 'Raw moment (X) (memu)'
 title (['Raw plot - ', newStr]) 
 subplot (2,2,2); 
-plot(zz(tr).data(:,8), zz(tr).data(:,12))
+plot(zz(tr).data(:,8), zz(tr).data(:,sec))
 xlabel 'Applied field (Oe)'
 ylabel 'Raw moment (X) (memu)'
 title 'Manipulated plot'
@@ -38,7 +47,7 @@ xlabel 'Applied field (Oe)'
 ylabel 'Raw moment (X) (memu)'
 title 'Raw plot - slope'
 subplot (2,2,4); 
-vsmplot(zz(tr).data(:,8), zz(tr).data(:,12))
+vsmplot(zz(tr).data(:,8), zz(tr).data(:,sec))
 xlabel 'Applied field (Oe)'
 ylabel 'Raw moment (X) (memu)'
 title 'Manipulated plot - slope'
