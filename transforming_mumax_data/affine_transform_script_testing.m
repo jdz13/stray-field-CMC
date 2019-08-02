@@ -1,6 +1,6 @@
 tic
 data_before = BMumax;
-theta = 90*(pi/180);
+theta = 23*(pi/180);
 
 
 %for theta = linspace(0,2*pi,37)
