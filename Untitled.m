@@ -16,8 +16,13 @@
 
 %%
 
+<<<<<<< HEAD
 mainoption = 6;
 secondaryoption = 3;
+=======
+mainoption = 5;
+secondaryoption = 5;
+>>>>>>> f8b824162267bde2f5d97a0a169a1ec31eab8856
 thirdoption = 0; 
 
 %-------------------------------------------------------------------------

@@ -15,17 +15,25 @@
 % Option 6 - not really sure what I was attempting here.... or if it works
 % Option 7 produces a graph showing the field ranges possible for a given
 % set of magnet sizes over a particular distance. Needs these inputs. 
+<<<<<<< HEAD
 % Option 8 allows you to plot all of the imagesc plots of ratio_key on one
 % set of subplots 
 % ** requires option 3 to be ran first
 % ** needs inputs - check the notation at the beginning of the code
+=======
+%
+>>>>>>> f8b824162267bde2f5d97a0a169a1ec31eab8856
 
 % JDZ March 2019 (jdz25@cam.ac.uk)
 
 tic
 
 %-------------------------------------------------------------------------
+<<<<<<< HEAD
 option = 3;
+=======
+option = 7;
+>>>>>>> f8b824162267bde2f5d97a0a169a1ec31eab8856
 %-------------------------------------------------------------------------
 
 if option == 1 
@@ -265,8 +273,12 @@ elseif option == 6
     
     end
     clear Xop Yop
+<<<<<<< HEAD
  
 %% ------------------------------------------------------------------------
+=======
+    
+>>>>>>> f8b824162267bde2f5d97a0a169a1ec31eab8856
 elseif option == 7
     
     graphonly = 1;
@@ -360,6 +372,7 @@ elseif option == 7
         else 
             disp 'Invalid secop - choose another'
         end 
+<<<<<<< HEAD
     end 
    
 %% ------------------------------------------------------------------------
@@ -391,6 +404,9 @@ elseif option == 8
     end
     
 %% ------------------------------------------------------------------------
+=======
+   end 
+>>>>>>> f8b824162267bde2f5d97a0a169a1ec31eab8856
 else 
     disp 'Invalid option - please choose another'
     
