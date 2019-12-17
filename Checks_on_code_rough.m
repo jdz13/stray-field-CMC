@@ -1,4 +1,4 @@
-% spy is also a great tool for 2D ploits, not so good for 3D
+ n% spy is also a great tool for 2D ploits, not so good for 3D
 
 BtotMumax = sqrt(Bx.^2 + By.^2  + Bz.^2);
 

@@ -12,13 +12,20 @@
 % Option 5 displays FWHM for each channel - imagesc plots. PZ/swfield axes
 % **requires option 3 to be run first
 % **can be adapted for ratio/max-loc/separation etc. Any analysis variable.
+% Option 6 - not really sure what I was attempting here.... or if it works
+% Option 7 produces a graph showing the field ranges possible for a given
+% set of magnet sizes over a particular distance. Needs these inputs. 
+% Option 8 allows you to plot all of the imagesc plots of ratio_key on one
+% set of subplots 
+% ** requires option 3 to be ran first
+% ** needs inputs - check the notation at the beginning of the code
 
 % JDZ March 2019 (jdz25@cam.ac.uk)
 
 tic
 
 %-------------------------------------------------------------------------
-option = 1;
+option = 3;
 %-------------------------------------------------------------------------
 
 if option == 1 
@@ -29,7 +36,7 @@ if option == 1
     count = 0;
     PZset = [linspace(1e-3,8.5e-3,6),linspace(1e-2,50e-2,50)];
     
-PZ = PZset; %0.042; %linspace(5e-2,3e-2,21);
+PZ = PZset; %0.042; %linspace(5e-2,3e-2,21);n
 swfield = [2005,1703,1385, 1099, 798, 579, 427, 261, 150, 40]./1e4; %[linspace(0.4, 0.1,7),linspace(0.08,0.02,4)];
 theta_end = pi; theta_n =  361;
 theta = linspace(0,theta_end, theta_n); 
@@ -131,6 +138,11 @@ elseif option == 3
     analysis.fwhmxx = zeros(length(sampspac),size(PZ,2),length(swfield),length(pm_cl));
     analysis.maxloc = zeros(length(sampspac),size(PZ,2),length(swfield),length(pm_cl));
     
+    if length(pm_cl) == 1
+        analysis.fwhmxx(:,:,:,2) = 0;
+        analysis.maxloc(:,:,:,2) = 0;       
+    end 
+    
 for sp = 1:length(sampspac)
 for nm = 1:size(PZ,2)
 for sf = 1:length(swfield)
@@ -200,8 +212,8 @@ clear jkk hk mgs
 %% ------------------------------------------------------------------------
 elseif option == 5
     
-    sel = 4; % the sample space that you would like to view
-    mgs = 1;
+    sel = 1; % the sample space that you would like to view
+    mgs = 4;
     
     % Need to choose both axes
     % Option 1 = Sample space
@@ -214,7 +226,7 @@ elseif option == 5
     
     Xop = 3;       Yop = 4;   
     
-    figure(1); imagesc(swfield,PZ, (reshape(rad2deg(analysis.fwhmxx(sel,:,:,mgs)),[temp.lengths(Xop),temp.lengths(Yop)]))); 
+    figure(16); imagesc(swfield,PZ, (squeeze((analysis.ratiokey(sel,:,:,mgs))))); 
     ax = gca; trial = linspace(ax.XLim(1),ax.XLim(2),length(swfield)+1);
     trial = trial - (trial(2)-trial(1))/2;    trial(1) = [];
     xticks(trial);    xticklabels(fliplr(swfield));
@@ -253,6 +265,132 @@ elseif option == 6
     
     end
     clear Xop Yop
+ 
+%% ------------------------------------------------------------------------
+elseif option == 7
+    
+    graphonly = 1;
+    
+    if graphonly == 0
+    
+    op7.magsizes = linspace(1e-2,4e-2,7); % should I just use pm_cl? to keep parameters
+    op7.mxds = 1e-1; % define the max magnet surface to sample distance - lowest field
+    op7.mnds = 5e-3; % same but minimum - highest field 
+    op7.PZuset = [op7.mxds, op7.mnds];
+    
+    
+    op7.plane_N = [200,200];
+    op7.plane_lengths =  [5e-3,5e-3]; % [m] plus/minus extents to 
+    op7.cell_size = 2.*op7.plane_lengths./op7.plane_N;
+
+    op7.px = linspace(-op7.plane_lengths(1)+op7.cell_size(1)/2,op7.plane_lengths(1)-op7.cell_size(1)/2,op7.plane_N(1));
+    op7.py = linspace(-op7.plane_lengths(2)+op7.cell_size(2)/2,op7.plane_lengths(2)-op7.cell_size(2)/2,op7.plane_N(2));    
+    
+    op7.displa = [0,0,0]; 
+    op7.Msatpm = 1.27e6;
+    l = 1;
+    mxmdplt = zeros(1,length(op7.magsizes));
+    mnmdplt = mxmdplt;
+    
+    mxmxplt = mxmdplt;
+    mnmxplt = mxmdplt;
+    
+    mxmnplt = mxmdplt;
+    mnmnplt = mxmdplt;
+       
+    
+        for kkl = 1:length(op7.magsizes)
+            mgzs = [op7.magsizes(kkl),op7.magsizes(kkl),op7.magsizes(kkl)];
+            
+            op7.PZuser = op7.PZuset + (op7.magsizes(kkl)/2);
+                                   
+            [op7o(l).akoun, pzplot, op7o(l).max] = PMnotFD(mgzs, op7.px, op7.py, op7.PZuset,op7.Msatpm, op7.displa);
+                    
+            mxmdplt(l) = op7o(l).max(1); mnmdplt(l) = op7o(l).max(2);
+            
+            mxmxplt(l) = max(max(op7o(l).akoun(1).HzAkoun)); mnmxplt(l) = max(max(op7o(l).akoun(2).HzAkoun));
+            
+            mxmnplt(l) = mean(mean(op7o(l).akoun(1).HzAkoun)); mnmnplt(l) = mean(mean(op7o(l).akoun(2).HzAkoun));
+                        
+            l = l+1;
+                        
+        end 
+    
+        elseif graphonly == 1
+        secop = 4;
+        figno = 67;
+        
+        %secop1 - plot maxfield
+        %secop2 - plot midfield
+        %secop3 - plot avfield 
+        %secop4 - plot all max options to compare
+        
+        if secop == 1
+            figure(figno); clf; hold on;
+            plot(op7.magsizes.*100, mxmxplt, op7.magsizes.*100, mnmxplt)
+            xlabel 'Magnet cuboidal length (cm)'
+            ylabel 'Field (T)'
+            legendCell = cellstr(num2str((op7.PZuset.*100)', 'PZ =%-g (cm)')); legend(legendCell,'Location','Northwest')
+            title 'Maximum and minimum fields for different magnet sizes - max method'
+             
+        elseif secop == 2
+            figure(figno); clf; hold on;
+            plot(op7.magsizes.*100, mxmdplt, op7.magsizes.*100, mnmdplt)
+            xlabel 'Magnet cuboidal length (cm)'
+            ylabel 'Field (T)'
+            legendCell = cellstr(num2str((op7.PZuset.*100)', 'PZ =%-g (cm)')); legend(legendCell,'Location','Northwest')
+            title 'Maximum and minimum fields for different magnet sizes - middle method'
+            
+        elseif secop == 3
+            figure(figno); clf; hold on;
+            plot(op7.magsizes.*100, mxmnplt, op7.magsizes.*100, mnmnplt)
+            xlabel 'Magnet cuboidal length (cm)'
+            ylabel 'Field (T)'
+            legendCell = cellstr(num2str((op7.PZuset.*100)', 'PZ =%-g (cm)')); legend(legendCell,'Location','Northwest')
+            title 'Maximum and minimum fields for different magnet sizes - mean method'
+            
+        elseif secop == 4
+            figure(figno); clf; hold on;
+            plot(op7.magsizes.*100, mnmxplt,'ro', op7.magsizes.*100, mnmdplt,'bx', op7.magsizes.*100, mnmnplt,'g--')
+            xlabel 'Magnet cuboidal length (cm)'
+            ylabel 'Field (T)'
+            title (['Maximum fields for different magnet sizes - all methods at ', num2str(op7.mnds*1000),'mm'])
+            legend ('Max','Middle','Mean', 'Location', 'Northwest')
+            
+        else 
+            disp 'Invalid secop - choose another'
+        end 
+    end 
+   
+%% ------------------------------------------------------------------------
+elseif option == 8
+    
+    % Things that need to be input
+    
+    figno1 = 16; % what figure number do you want this to be?
+    sel = 1; % choose which sample space to look over (index)
+    hm = [2,2]; % How many - what size subplot space do you want? 
+    if hm(1)*hm(2) < length(pm_cl)
+        disp 'Check you''re number of subplots - it doesn''t appear to be enough!'
+    else 
+    
+    figure(figno1);clf
+     
+ for mgs = 1:length(pm_cl)
+    
+     subplot(hm(1),hm(2),mgs);
+    
+    imagesc(swfield,PZ, (squeeze((analysis.ratiokey(sel,:,:,mgs))))); 
+    ax = gca; trial = linspace(ax.XLim(1),ax.XLim(2),length(swfield)+1);
+    trial = trial - (trial(2)-trial(1))/2;    trial(1) = [];
+    xticks(trial);    xticklabels(fliplr(swfield));
+    xlabel 'swfield (T)';ylabel 'Pz (m)';
+    title (['Ratio plot for magnet OD = ', num2str(pm_cl(mgs)*1000), 'mm'])
+    colorbar; %caxis([2,5])
+ end 
+    end
+    
+%% ------------------------------------------------------------------------
 else 
     disp 'Invalid option - please choose another'
     
