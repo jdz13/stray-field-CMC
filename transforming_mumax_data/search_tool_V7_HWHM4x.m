@@ -119,6 +119,6 @@ varst.RES = RES;
 varst.CON = con;
 varst.theta = theta;
 varst.MxB = MxB;
- toc
+varst.timer = toc;
 
 end 

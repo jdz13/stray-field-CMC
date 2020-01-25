@@ -1,4 +1,4 @@
-function [varst, SWres,Bset,FWHMres,ind1res,ind2res] = search_tool_8_HWHM4x(KRV,PM,RES,pm_cl,Mdl_dtl,Bobj,theta,particle_loc,control,con)
+function [varst, SWres,Bset,FWHMres,ind1res,ind2res,MxB] = search_tool_8_HWHM4x(KRV,PM,RES,pm_cl,Mdl_dtl,Bobj,theta,particle_loc,control,con)
 
 tic
 
@@ -49,7 +49,7 @@ for rescount = 1:length(RES)
             while abs(tmps(1) - tmps(2)) > 1e-4 && SH0 > MxB(pm,length(MxB(pm,:))) && tmps(2) ~= 0
 
                 % Find where that sits in space (Pz)
-                pzcut =  find(MxB(pm,:) >= SH0, 1, 'last')+1;
+               pzcut =  find(MxB(pm,:) >= SH0, 1, 'last');
                
                 clear variable % fill this with whatever needs refreshing through each run. 
 
@@ -117,6 +117,6 @@ varst.RES = RES;
 varst.CON = con;
 varst.theta = theta;
 varst.MxB = MxB;
- toc
+varst.timer = toc;
 
 end 

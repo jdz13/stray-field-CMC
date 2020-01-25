@@ -1,4 +1,7 @@
 function [] = saved_var_plotter_V2 (ist,figno)
+% ist is the input structure, designed from the new function
+% should only now need that input and what figure you would like and it
+% will sort the rest. 
 
 plotter = zeros(length(ist.varst.KRV), length(ist.varst.PM), length(ist.varst.RES));
 str = inputname(1);
@@ -28,6 +31,7 @@ figure(figno); clf;
         yticks(trial);    yticklabels((fliplr(ist.varst.KRV)));
         
         if jj == ceil(noy/2)
-            title (compose("Data for " + str + "\nKRV  = [" + num2str(ist.varst.KRV) + "]\nPM sizes = [" + num2str(ist.varst.PM) + "], Con = " + num2str(ist.varst.CON) + "\n \nStart field = " + num2str(ist.varst.RES(jj)) + "T"))
+            title (compose("Data for " + str + "\nKRV  = [" + num2str(ist.varst.KRV) + "], PM sizes = [" + num2str(ist.varst.PM) + "], Con = " + num2str(ist.varst.CON) + "\n" + ist.comments + "\n \n Start field = " + num2str(ist.varst.RES(jj)) + "T"))
         end 
     end
+end
